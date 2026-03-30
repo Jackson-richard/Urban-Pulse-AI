@@ -20,8 +20,6 @@ if not os.path.exists(MODEL_PATH):
 
 model = joblib.load(MODEL_PATH)
 RISK_LABELS = ["Low", "Medium", "High"]
-
-# Store prediction history (last 100 entries)
 prediction_history = deque(maxlen=100)
 latest_prediction = None
 
@@ -43,34 +41,35 @@ app.add_middleware(
 class CrowdData(BaseModel):
     density: float
     speed: float
+    trend: float = 0.0
+    acceleration: float = 0.0
 
 
 class PredictionResponse(BaseModel):
     density: float
     speed: float
+    trend: float
+    acceleration: float
     risk_level: str
     confidence: float
     reason: str
 
 
-def generate_reason(density, speed, risk_level):
-    if risk_level == "High":
-        if speed < 20:
-            return "Very dense crowd with near-zero movement. Potential gridlock."
-        elif density > 8:
-            return "Extremely high crowd density detected. Movement severely restricted."
-        else:
-            return "High density combined with slow movement indicates congestion."
-    elif risk_level == "Medium":
-        if speed < 50:
-            return "Moderate crowd density with reduced movement speed."
-        else:
-            return "Growing crowd density. Movement still possible but slowing."
+def predict_risk(density, speed, trend, acceleration):
+    """Rule-based congestion prediction."""
+    if density > 7 and speed < 30 and trend > 0:
+        risk_level = "High"
+        confidence = min(0.95, 0.7 + (density / 50) + (abs(trend) / 10))
+        reason = f"Dense crowd ({density:.1f}), slow movement ({speed:.1f} px/s), rising trend (+{trend:.2f}). Congestion imminent."
+    elif density > 4:
+        risk_level = "Medium"
+        confidence = min(0.90, 0.6 + (density / 30))
+        reason = f"Moderate density ({density:.1f}). Monitor for congestion buildup."
     else:
-        if density < 1:
-            return "Very few people detected. Area is clear."
-        else:
-            return "Low crowd density with normal movement speed. No congestion risk."
+        risk_level = "Low"
+        confidence = min(0.98, 0.8 + (1 / (density + 1)))
+        reason = f"Low crowd density ({density:.1f}). Area is flowing normally."
+    return risk_level, round(confidence, 3), reason
 
 
 @app.get("/")
@@ -87,18 +86,17 @@ def health():
 def predict(data: CrowdData):
     global latest_prediction
 
-    features = np.array([[data.density, data.speed]])
-    prediction = model.predict(features)[0]
-    probabilities = model.predict_proba(features)[0]
-    confidence = float(max(probabilities))
-    risk_level = RISK_LABELS[prediction]
-    reason = generate_reason(data.density, data.speed, risk_level)
+    risk_level, confidence, reason = predict_risk(
+        data.density, data.speed, data.trend, data.acceleration
+    )
 
     result = {
         "density": round(data.density, 2),
         "speed": round(data.speed, 2),
+        "trend": round(data.trend, 3),
+        "acceleration": round(data.acceleration, 4),
         "risk_level": risk_level,
-        "confidence": round(confidence, 3),
+        "confidence": confidence,
         "reason": reason,
         "timestamp": time.time(),
     }
@@ -121,7 +119,6 @@ def get_history():
     return {"count": len(prediction_history), "data": list(prediction_history)}
 
 
-# Serve frontend static files
 app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
 
 

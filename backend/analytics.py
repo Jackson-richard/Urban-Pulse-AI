@@ -45,11 +45,16 @@ RISK_COLORS = {
 }
 
 
-def send_to_api(density, speed):
+def send_to_api(density, speed, trend, acceleration):
     try:
         response = requests.post(
             API_URL,
-            json={"density": density, "speed": speed},
+            json={
+                "density": density,
+                "speed": speed,
+                "trend": trend,
+                "acceleration": acceleration,
+            },
             timeout=1,
         )
         if response.status_code == 200:
@@ -107,7 +112,8 @@ def run_analytics(source):
     prev_positions = {}
     all_track_ids = set()
     last_prediction = None
-    api_call_interval = 10  
+    api_call_interval = 10
+    density_history = []  # last 10 density values for trend
 
     while True:
         ret, frame = cap.read()
@@ -162,8 +168,16 @@ def run_analytics(source):
         avg_speed = calculate_speed(prev_positions, curr_positions, fps_video)
         prev_positions = curr_positions.copy()
 
+        # Trend: track last 10 density values
+        density_history.append(density)
+        if len(density_history) > 10:
+            density_history.pop(0)
+
+        trend = density_history[-1] - density_history[0] if len(density_history) >= 2 else 0.0
+        acceleration = trend / len(density_history) if len(density_history) >= 2 else 0.0
+
         if api_connected and frame_count % api_call_interval == 0:
-            prediction = send_to_api(density, avg_speed)
+            prediction = send_to_api(density, avg_speed, trend, acceleration)
             if prediction:
                 last_prediction = prediction
 
@@ -180,6 +194,7 @@ def run_analytics(source):
             (f"People: {people_count}  |  Unique: {len(all_track_ids)}", (255, 255, 255)),
             (f"Density: {density:.1f} ppl/Mpx", (0, 255, 200)),
             (f"Avg Speed: {avg_speed:.1f} px/s", (0, 200, 255)),
+            (f"Trend: {trend:+.2f}  |  Accel: {acceleration:+.3f}", (255, 200, 100)),
             (f"FPS: {processing_fps:.1f}  |  Frame: {frame_count}", (180, 180, 180)),
         ]
 
