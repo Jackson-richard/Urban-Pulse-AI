@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Pulse AI — Crowd Congestion Dashboard</title>
+    <meta name="description" content="Real-time crowd flow and congestion prediction dashboard powered by AI">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <div class="logo-pulse"></div>
+                <h1>Urban Pulse <span class="accent">AI</span></h1>
+            </div>
+            <div class="header-right">
+                <div class="status-badge" id="statusBadge">
+                    <div class="status-dot"></div>
+                    <span>Connecting...</span>
+                </div>
+                <div class="clock" id="clock"></div>
+            </div>
+        </header>
+
+        <!-- Risk Alert Banner -->
+        <div class="risk-banner" id="riskBanner">
+            <div class="risk-banner-content">
+                <span class="risk-icon" id="riskIcon">⚡</span>
+                <div class="risk-banner-text">
+                    <span class="risk-label" id="riskLabel">ANALYZING...</span>
+                    <span class="risk-reason" id="riskReason">Waiting for data from analytics engine</span>
+                </div>
+                <div class="risk-confidence" id="riskConfidence">—</div>
+            </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="cards-grid">
+            <div class="card" id="cardDensity">
+                <div class="card-icon">👥</div>
+                <div class="card-content">
+                    <div class="card-label">Crowd Density</div>
+                    <div class="card-value" id="densityValue">0.0</div>
+                    <div class="card-unit">people / megapixel</div>
+                </div>
+                <div class="card-sparkline" id="densitySparkline"></div>
+            </div>
+
+            <div class="card" id="cardSpeed">
+                <div class="card-icon">🚶</div>
+                <div class="card-content">
+                    <div class="card-label">Average Speed</div>
+                    <div class="card-value" id="speedValue">0.0</div>
+                    <div class="card-unit">pixels / second</div>
+                </div>
+                <div class="card-sparkline" id="speedSparkline"></div>
+            </div>
+
+            <div class="card" id="cardRisk">
+                <div class="card-icon">⚠️</div>
+                <div class="card-content">
+                    <div class="card-label">Risk Level</div>
+                    <div class="card-value" id="riskValue">—</div>
+                    <div class="card-unit" id="riskConfText">confidence: —</div>
+                </div>
+                <div class="risk-gauge" id="riskGauge">
+                    <div class="gauge-fill" id="gaugeFill"></div>
+                </div>
+            </div>
+
+            <div class="card" id="cardUpdates">
+                <div class="card-icon">📊</div>
+                <div class="card-content">
+                    <div class="card-label">Total Updates</div>
+                    <div class="card-value" id="updatesValue">0</div>
+                    <div class="card-unit">predictions received</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart Section -->
+        <div class="chart-section">
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h2>📈 Live Trend</h2>
+                    <div class="chart-legend">
+                        <span class="legend-item"><span class="legend-dot density-dot"></span> Density</span>
+                        <span class="legend-item"><span class="legend-dot speed-dot"></span> Speed (÷10)</span>
+                        <span class="legend-item"><span class="legend-dot risk-dot"></span> Risk Score</span>
+                    </div>
+                </div>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Manual Test Section -->
+        <div class="test-section">
+            <div class="test-container">
+                <h2>🧪 Manual Prediction Test</h2>
+                <p class="test-desc">Enter custom values to test the congestion model</p>
+                <div class="test-form">
+                    <div class="input-group">
+                        <label for="testDensity">Density (ppl/Mpx)</label>
+                        <input type="number" id="testDensity" value="5.0" step="0.5" min="0" max="20">
+                    </div>
+                    <div class="input-group">
+                        <label for="testSpeed">Speed (px/s)</label>
+                        <input type="number" id="testSpeed" value="80.0" step="5" min="0" max="500">
+                    </div>
+                    <button id="testBtn" onclick="testPredict()">Predict</button>
+                </div>
+                <div class="test-result" id="testResult"></div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Urban Pulse AI — Hackathon Project • Powered by YOLOv8 + DeepSORT + FastAPI + scikit-learn</p>
+        </footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>

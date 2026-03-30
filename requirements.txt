@@ -1,0 +1,13 @@
+
+ultralytics>=8.0.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+
+# Step 2: DeepSORT Tracking
+deep-sort-realtime>=1.3.2
+
+# Step 4: FastAPI + ML Model
+fastapi>=0.100.0
+uvicorn>=0.23.0
+scikit-learn>=1.3.0
+joblib>=1.3.0
