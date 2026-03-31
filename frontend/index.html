@@ -12,11 +12,11 @@
 </head>
 <body>
     <div class="app">
-        <!-- Header -->
         <header class="header">
             <div class="header-left">
                 <div class="logo-pulse"></div>
                 <h1>Urban Pulse <span class="accent">AI</span></h1>
+                <span class="version-badge">v2.0</span>
             </div>
             <div class="header-right">
                 <div class="status-badge" id="statusBadge">
@@ -27,7 +27,6 @@
             </div>
         </header>
 
-        <!-- Risk Alert Banner -->
         <div class="risk-banner" id="riskBanner">
             <div class="risk-banner-content">
                 <span class="risk-icon" id="riskIcon">⚡</span>
@@ -39,7 +38,6 @@
             </div>
         </div>
 
-        <!-- Metric Cards -->
         <div class="cards-grid">
             <div class="card" id="cardDensity">
                 <div class="card-icon">👥</div>
@@ -48,7 +46,6 @@
                     <div class="card-value" id="densityValue">0.0</div>
                     <div class="card-unit">people / megapixel</div>
                 </div>
-                <div class="card-sparkline" id="densitySparkline"></div>
             </div>
 
             <div class="card" id="cardSpeed">
@@ -58,7 +55,6 @@
                     <div class="card-value" id="speedValue">0.0</div>
                     <div class="card-unit">pixels / second</div>
                 </div>
-                <div class="card-sparkline" id="speedSparkline"></div>
             </div>
 
             <div class="card" id="cardRisk">
@@ -73,17 +69,73 @@
                 </div>
             </div>
 
-            <div class="card" id="cardUpdates">
-                <div class="card-icon">📊</div>
+            <div class="card" id="cardFlow">
+                <div class="card-icon">🧭</div>
                 <div class="card-content">
-                    <div class="card-label">Total Updates</div>
-                    <div class="card-value" id="updatesValue">0</div>
-                    <div class="card-unit">predictions received</div>
+                    <div class="card-label">Flow Direction</div>
+                    <div class="card-value" id="flowValue">—</div>
+                    <div class="card-unit">crowd movement</div>
                 </div>
             </div>
         </div>
 
-        <!-- Chart Section -->
+        <!-- Zone Heatmap + Forecast side by side -->
+        <div class="zone-forecast-row">
+            <div class="zone-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>🗺️ Zone Heatmap</h2>
+                        <span class="hotzone-badge" id="hotzoneBadge">Hot Zone: —</span>
+                    </div>
+                    <div class="zone-grid" id="zoneGrid">
+                        <div class="zone-cell" id="zoneA1" data-zone="A1">
+                            <span class="zone-label">A1</span>
+                            <span class="zone-count">0</span>
+                        </div>
+                        <div class="zone-cell" id="zoneA2" data-zone="A2">
+                            <span class="zone-label">A2</span>
+                            <span class="zone-count">0</span>
+                        </div>
+                        <div class="zone-cell" id="zoneB1" data-zone="B1">
+                            <span class="zone-label">B1</span>
+                            <span class="zone-count">0</span>
+                        </div>
+                        <div class="zone-cell" id="zoneB2" data-zone="B2">
+                            <span class="zone-label">B2</span>
+                            <span class="zone-count">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="forecast-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>🔮 XGBoost Forecast</h2>
+                        <span class="forecast-status" id="forecastStatus">Waiting...</span>
+                    </div>
+                    <div class="forecast-content">
+                        <div class="forecast-item">
+                            <span class="forecast-label">Predicted Density</span>
+                            <span class="forecast-value" id="forecastDensity">—</span>
+                        </div>
+                        <div class="forecast-item">
+                            <span class="forecast-label">Predicted Risk</span>
+                            <span class="forecast-value" id="forecastRisk">—</span>
+                        </div>
+                        <div class="forecast-item">
+                            <span class="forecast-label">Confidence</span>
+                            <span class="forecast-value" id="forecastConf">—</span>
+                        </div>
+                        <div class="forecast-item">
+                            <span class="forecast-label">Based On</span>
+                            <span class="forecast-value" id="forecastSnapshots">— snapshots</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="chart-section">
             <div class="chart-container">
                 <div class="chart-header">
@@ -92,24 +144,24 @@
                         <span class="legend-item"><span class="legend-dot density-dot"></span> Density</span>
                         <span class="legend-item"><span class="legend-dot speed-dot"></span> Speed (÷10)</span>
                         <span class="legend-item"><span class="legend-dot risk-dot"></span> Risk Score</span>
+                        <span class="legend-item"><span class="legend-dot forecast-dot"></span> Forecast</span>
                     </div>
                 </div>
                 <canvas id="trendChart"></canvas>
             </div>
         </div>
 
-        <!-- Manual Test Section -->
         <div class="test-section">
             <div class="test-container">
                 <h2>🧪 Manual Prediction Test</h2>
                 <p class="test-desc">Enter custom values to test the congestion model</p>
                 <div class="test-form">
                     <div class="input-group">
-                        <label for="testDensity">Density (ppl/Mpx)</label>
+                        <label for="testDensity">Density</label>
                         <input type="number" id="testDensity" value="5.0" step="0.5" min="0" max="20">
                     </div>
                     <div class="input-group">
-                        <label for="testSpeed">Speed (px/s)</label>
+                        <label for="testSpeed">Speed</label>
                         <input type="number" id="testSpeed" value="80.0" step="5" min="0" max="500">
                     </div>
                     <button id="testBtn" onclick="testPredict()">Predict</button>
@@ -118,9 +170,8 @@
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
-            <p>Urban Pulse AI — Hackathon Project • Powered by YOLOv8 + DeepSORT + FastAPI + scikit-learn</p>
+            <p>Urban Pulse AI v2.0 — Powered by YOLOv8 + DeepSORT + XGBoost + FastAPI</p>
         </footer>
     </div>
 
