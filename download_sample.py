@@ -1,7 +1,3 @@
-"""
-Downloads a sample pedestrian video for testing.
-Saves to data/video.mp4
-"""
 
 import urllib.request
 import os

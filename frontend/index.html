@@ -16,7 +16,7 @@
             <div class="header-left">
                 <div class="logo-pulse"></div>
                 <h1>Urban Pulse <span class="accent">AI</span></h1>
-                <span class="version-badge">v2.0</span>
+                <span class="version-badge">v4.0</span>
             </div>
             <div class="header-right">
                 <div class="status-badge" id="statusBadge">
@@ -38,6 +38,18 @@
             </div>
         </div>
 
+        <!-- v4.0: Anomaly Alert Banner -->
+        <div class="anomaly-banner" id="anomalyBanner" style="display:none;">
+            <div class="anomaly-banner-content">
+                <span class="anomaly-icon" id="anomalyIcon">🚨</span>
+                <div class="anomaly-banner-text">
+                    <span class="anomaly-type" id="anomalyType">ANOMALY DETECTED</span>
+                    <span class="anomaly-reason" id="anomalyReason"></span>
+                </div>
+                <div class="anomaly-confidence" id="anomalyConfidence">—</div>
+            </div>
+        </div>
+
         <div class="cards-grid">
             <div class="card" id="cardDensity">
                 <div class="card-icon">👥</div>
@@ -45,6 +57,7 @@
                     <div class="card-label">Crowd Density</div>
                     <div class="card-value" id="densityValue">0.0</div>
                     <div class="card-unit">people / megapixel</div>
+                    <div class="card-realworld" id="densityRealworld"></div>
                 </div>
             </div>
 
@@ -54,6 +67,7 @@
                     <div class="card-label">Average Speed</div>
                     <div class="card-value" id="speedValue">0.0</div>
                     <div class="card-unit">pixels / second</div>
+                    <div class="card-realworld" id="speedRealworld"></div>
                 </div>
             </div>
 
@@ -136,6 +150,62 @@
             </div>
         </div>
 
+        <!-- ── NEW: Advanced Analytics Row ── -->
+        <div class="advanced-row">
+            <!-- Route Recommendations -->
+            <div class="adv-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>🛤️ Route Recommendations</h2>
+                        <span class="route-status" id="routeStatus">Waiting...</span>
+                    </div>
+                    <div class="route-list" id="routeList">
+                        <div class="route-empty">No recommendations yet. Start analytics to generate.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spatiotemporal Forecast -->
+            <div class="adv-section">
+                <div class="section-card">
+                    <div class="section-header">
+                        <h2>⏱️ Next Congestion Forecast</h2>
+                        <span class="spatio-status" id="spatioStatus">Waiting...</span>
+                    </div>
+                    <div class="spatio-content">
+                        <div class="spatio-hero">
+                            <div class="spatio-zone-display">
+                                <span class="spatio-label">Predicted Next Hot Zone</span>
+                                <span class="spatio-zone" id="spatioZone">—</span>
+                            </div>
+                            <div class="spatio-time-display">
+                                <span class="spatio-label">Est. Time to Congestion</span>
+                                <span class="spatio-time" id="spatioTime">—</span>
+                            </div>
+                        </div>
+                        <div class="spatio-trends" id="spatioTrends">
+                            <span class="spatio-label">Zone Trends</span>
+                            <div class="trend-bars" id="trendBars"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── NEW: Explainable AI Reasoning Panel ── -->
+        <div class="xai-section">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>🧠 Explainable AI Reasoning</h2>
+                    <span class="xai-summary" id="xaiSummary">Waiting for analysis...</span>
+                </div>
+                <div class="xai-factors" id="xaiFactors">
+                    <div class="xai-empty">Risk factors will appear here once analytics begin.</div>
+                </div>
+                <div class="xai-thresholds" id="xaiThresholds"></div>
+            </div>
+        </div>
+
         <div class="chart-section">
             <div class="chart-container">
                 <div class="chart-header">
@@ -170,8 +240,21 @@
             </div>
         </div>
 
+        <!-- v4.0: Deployment Status Bar -->
+        <div class="deploy-status-bar" id="deployStatusBar">
+            <div class="section-card">
+                <div class="section-header">
+                    <h2>⚙️ Deployment Configuration</h2>
+                    <span class="deploy-mode-badge" id="deployModeBadge">Standard Mode</span>
+                </div>
+                <div class="deploy-toggles" id="deployToggles">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
         <footer class="footer">
-            <p>Urban Pulse AI v2.0 — Powered by YOLOv8 + DeepSORT + XGBoost + FastAPI</p>
+            <p>Urban Pulse AI v4.0 — Powered by YOLOv8 + DeepSORT + XGBoost + FastAPI + Anomaly Detection + Camera Calibration</p>
         </footer>
     </div>
 

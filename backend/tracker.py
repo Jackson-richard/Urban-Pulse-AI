@@ -11,8 +11,6 @@ def get_color(track_id):
 
 
 def run_tracker(source):
-    """Run YOLO detection + DeepSORT tracking on a video source."""
-
     model = YOLO("yolov8n.pt")
 
     tracker = DeepSort(

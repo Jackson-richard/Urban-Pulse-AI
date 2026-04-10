@@ -1,10 +1,3 @@
-"""
-Urban Pulse AI — XGBoost Congestion Forecasting
-
-Trains an XGBoost model on synthetic time-series crowd data to predict
-future density and risk. Can be retrained on real snapshot data later.
-"""
-
 import os
 import numpy as np
 import joblib
@@ -19,10 +12,6 @@ RISK_LABELS = ["Low", "Medium", "High"]
 
 
 def generate_synthetic_timeseries(n_sequences=3000, window=5):
-    """
-    Generate synthetic time-series windows for training.
-    Each sample: [density_t-4, speed_t-4, ..., density_t, speed_t] → density_t+5, risk_t+5
-    """
     X, y_density, y_risk = [], [], []
 
     for _ in range(n_sequences):
@@ -44,7 +33,7 @@ def generate_synthetic_timeseries(n_sequences=3000, window=5):
             speeds = np.random.uniform(5, 40, window) + np.random.normal(0, 5, window)
             future_density = np.random.uniform(7, 15)
             risk = 2
-        else:  # dispersing
+        else:  
             base = np.random.uniform(5, 10)
             densities = base - np.linspace(0, 4, window) + np.random.normal(0, 0.3, window)
             speeds = np.linspace(30, 150, window) + np.random.normal(0, 10, window)
@@ -139,11 +128,6 @@ def load_forecast_models():
 
 
 def predict_future(snapshots, window=5):
-    """
-    Given a list of snapshot dicts, predict future density and risk.
-    Each snapshot should have: {density, speed, trend}
-    Returns: {predicted_density, predicted_risk, risk_confidence}
-    """
     density_model, risk_model = load_forecast_models()
     if density_model is None or risk_model is None:
         return None

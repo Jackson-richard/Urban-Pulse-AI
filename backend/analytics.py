@@ -43,7 +43,7 @@ def calculate_speed(prev_positions, curr_positions, fps):
 
 
 def calculate_flow_direction(prev_positions, curr_positions):
-    """Returns dominant crowd flow direction as (angle, label)."""
+    """Returns dominant crowd flow direction as (angle, label, individual_angles_list)."""
     angles = []
     for track_id, curr_pos in curr_positions.items():
         if track_id in prev_positions:
@@ -54,12 +54,12 @@ def calculate_flow_direction(prev_positions, curr_positions):
                 angle = np.degrees(np.arctan2(-dy, dx)) % 360
                 angles.append(angle)
     if not angles:
-        return 0.0, "Stationary"
+        return 0.0, "Stationary", []
     avg_angle = np.mean(angles)
     directions = ["→ East", "↗ NE", "↑ North", "↖ NW",
                    "← West", "↙ SW", "↓ South", "↘ SE"]
     idx = int((avg_angle + 22.5) / 45) % 8
-    return round(avg_angle, 1), directions[idx]
+    return round(avg_angle, 1), directions[idx], angles
 
 
 def get_zone_densities(curr_positions, frame_width, frame_height, grid=(2, 2)):
@@ -125,7 +125,9 @@ RISK_COLORS = {
 }
 
 
-def send_to_api(density, speed, trend, acceleration, zone_counts, flow_direction):
+def send_to_api(density, speed, trend, acceleration, zone_counts,
+                flow_direction, individual_angles=None,
+                prev_dominant_angle=None, people_count=0):
     try:
         response = requests.post(
             API_URL,
@@ -136,6 +138,9 @@ def send_to_api(density, speed, trend, acceleration, zone_counts, flow_direction
                 "acceleration":   acceleration,
                 "zones":          zone_counts,
                 "flow_direction": flow_direction,
+                "individual_angles": individual_angles or [],
+                "prev_dominant_angle": prev_dominant_angle,
+                "people_count": people_count,
             },
             timeout=1,
         )
@@ -155,7 +160,6 @@ def run_analytics(source):
         max_age=30,
         n_init=3,
         max_iou_distance=0.7,
-        embedder=False,
     )
 
     if source.isdigit():
@@ -200,6 +204,7 @@ def run_analytics(source):
     density_history  = []
     zone_counts      = {}
     flow_direction   = "Stationary"
+    prev_dominant_angle = None
 
     while True:
         ret, frame = cap.read()
@@ -249,7 +254,7 @@ def run_analytics(source):
 
         density   = calculate_density(people_count, frame_width, frame_height)
         avg_speed = calculate_speed(prev_positions, curr_positions, fps_video)
-        flow_angle, flow_direction = calculate_flow_direction(prev_positions, curr_positions)
+        flow_angle, flow_direction, individual_angles = calculate_flow_direction(prev_positions, curr_positions)
         prev_positions = curr_positions.copy()
 
         density_history.append(density)
@@ -267,9 +272,14 @@ def run_analytics(source):
             last_snapshot_time = time.time()
 
         if api_connected and frame_count % api_call_interval == 0:
-            prediction = send_to_api(density, avg_speed, trend, acceleration, zone_counts, flow_direction)
+            prediction = send_to_api(
+                density, avg_speed, trend, acceleration,
+                zone_counts, flow_direction,
+                individual_angles, prev_dominant_angle, people_count,
+            )
             if prediction:
                 last_prediction = prediction
+            prev_dominant_angle = flow_angle
 
         elapsed        = time.time() - start_time
         processing_fps = 1.0 / elapsed if elapsed > 0 else 0
