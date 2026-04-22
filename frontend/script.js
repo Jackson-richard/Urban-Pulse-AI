@@ -20,7 +20,7 @@ const RISK_MAP = {
     "High":   { color: "#ef4444", icon: "🚨", score: 3 },
 };
 
-// Sound alert using Web Audio API
+
 function playAlertSound() {
     if (alertCooldown) return;
     alertCooldown = true;
