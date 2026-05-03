@@ -157,7 +157,6 @@ SIREN_HTML = """
 </audio>
 """
 
-# --- 5 MINUTE ALERT LOGIC ---
 if "high_risk_start_time" not in st.session_state:
     st.session_state.high_risk_start_time = None
 
