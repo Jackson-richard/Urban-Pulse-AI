@@ -61,7 +61,6 @@ st.markdown("""
     }
     .xai-card .factor-detail { color: #e2e8f0; font-weight: 500; }
 
-    /* Threshold pills */
     .threshold-pill {
         display: inline-flex; align-items: center; gap: 6px;
         padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 600;
@@ -74,7 +73,6 @@ st.markdown("""
     .threshold-dot.exceeded { background: #ef4444; box-shadow: 0 0 6px #ef4444; }
     .threshold-dot.ok { background: #10b981; box-shadow: 0 0 6px #10b981; }
 
-    /* Spatio hero display */
     .spatio-hero {
         text-align: center; padding: 16px;
         background: linear-gradient(135deg, rgba(30,30,60,0.9), rgba(20,20,45,0.95));
