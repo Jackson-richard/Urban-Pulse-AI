@@ -197,7 +197,6 @@ if advanced_data and advanced_data.get("status") == "ok":
         )
 
 
-# --- RENDER DATA ---
 if not latest_data or latest_data.get("status") == "no_data":
     st.info("Waiting for data. Upload a video on the left sidebar and click 'Start Processing Video' to begin tracking people.")
 else:
