@@ -6,11 +6,9 @@ import plotly.graph_objects as go
 import subprocess
 import os
 
-# Configurations
 API_URL = "http://localhost:8000"
 st.set_page_config(page_title="Urban Pulse AI Dashboard", page_icon="🏙️", layout="wide")
 
-# Custom CSS for advanced panels
 st.markdown("""
 <style>
     .block-container {
