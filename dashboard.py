@@ -115,7 +115,7 @@ st.markdown("""
 
 st.title("🏙️ Urban Pulse AI - Live Dashboard")
 
-# --- FILE UPLOAD & ANALYTICS TRIGGER ---
+
 st.sidebar.header("📁 Video Upload")
 st.sidebar.markdown("Upload a standard video (MP4/AVI) to run real-time OpenCV tracking on it.")
 uploaded_file = st.sidebar.file_uploader("Upload video", type=["mp4", "avi", "mov"])
