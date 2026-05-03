@@ -87,7 +87,6 @@ st.markdown("""
         font-size: 32px; font-weight: 800; color: #06b6d4;
     }
 
-    /* v4.0: Anomaly Alert */
     .anomaly-alert {
         padding: 16px 22px; border-radius: 10px; margin-bottom: 12px;
         font-weight: 600; font-size: 15px;
