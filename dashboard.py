@@ -48,7 +48,6 @@ st.markdown("""
     .route-card.medium .priority-badge { background: rgba(245,158,11,0.2); color: #f59e0b; }
     .route-card.low .priority-badge { background: rgba(16,185,129,0.2); color: #10b981; }
 
-    /* XAI factor cards */
     .xai-card {
         background: rgba(20,20,40,0.85); border-radius: 8px; padding: 12px 16px;
         margin-bottom: 6px; border-left: 3px solid #8b5cf6; color: #cbd5e1; font-size: 14px;
