@@ -28,7 +28,7 @@ st.markdown("""
     }
     @keyframes blinker { 50% { opacity: 0.5; } }
 
-    /* Route recommendation cards */
+
     .route-card {
         background: linear-gradient(135deg, rgba(30,30,50,0.9), rgba(20,20,40,0.95));
         border-radius: 10px; padding: 14px 18px; margin-bottom: 8px;
