@@ -104,7 +104,6 @@ st.markdown("""
         margin-left: auto; font-size: 22px; font-weight: 800;
     }
 
-    /* v4.0: Deploy toggle */
     .deploy-card {
         background: rgba(20,20,40,0.7); border-radius: 8px; padding: 10px 14px;
         margin-bottom: 6px; border-left: 3px solid #64748b; color: #94a3b8; font-size: 13px;
