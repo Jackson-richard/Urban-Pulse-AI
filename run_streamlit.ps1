@@ -1,4 +1,4 @@
-# Cleanup any existing API process running on port 8000
+
 $existingApi = Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue
 if ($existingApi) {
     Write-Host "Stopping existing API server on port 8000..." -ForegroundColor Yellow
