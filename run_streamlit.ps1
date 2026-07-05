@@ -14,7 +14,6 @@ Write-Host "Starting Real-time OpenCV Analytics Engine..." -ForegroundColor Gree
 Start-Process "powershell" -ArgumentList "-NoExit -Command `"cd 'c:\Users\Jackson\OneDrive\Documents\urban pulse AI'; .\.venv\Scripts\Activate.ps1; python backend/analytics.py --source data/video.mp4`""
 Start-Sleep -Seconds 3
 
-# Start the new Streamlit Dashboard
 Write-Host "Launching Streamlit Dashboard..." -ForegroundColor Green
 Start-Process "powershell" -ArgumentList "-NoExit -Command `"cd 'c:\Users\Jackson\OneDrive\Documents\urban pulse AI'; .\.venv\Scripts\Activate.ps1; streamlit run dashboard.py`""
 
