@@ -5,7 +5,6 @@ if ($existingApi) {
     Stop-Process -Id $existingApi.OwningProcess -Force -ErrorAction SilentlyContinue
 }
 
-# Start the API Backend
 Write-Host "Starting API Backend..." -ForegroundColor Green
 Start-Process "powershell" -ArgumentList "-NoExit -Command `"cd 'c:\Users\Jackson\OneDrive\Documents\urban pulse AI'; .\.venv\Scripts\Activate.ps1; python backend/api.py`""
 Start-Sleep -Seconds 3
